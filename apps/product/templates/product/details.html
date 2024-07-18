@@ -1,0 +1,98 @@
+{% extends "administrator/base.html" %}
+{% load widget_tweaks %}
+
+{% block body %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Product Detail</h1>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title"></h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table class="table table-striped">
+                  <tbody>
+                    <label>Product Source :</label><br>
+                    <h5>{{ product.source }}</h5>
+                    <label>Product Confidence :</label><br>
+                    <h5>{{ product.confidence }}</h5>
+                    <label>Product Description :</label><br>
+                    <h4>{{ product.description }}</h4>
+
+                    <div>
+                      {% for image in images %}
+                        <img src="{{ image.image.url }}" alt="Product Image" height="150px">
+                      {% empty %}
+                        <p>No images available.</p>
+                      {% endfor %}
+                    </div>
+                  </tbody>
+                </table>
+
+            </div>
+            <!-- /.card-body -->
+
+            <!-- /.card-footer -->
+          </div>
+
+      </div>
+      <!-- /.col -->
+    </div>
+<!--    <div class="row">-->
+<!--          <div class="col-12">-->
+<!--            <div class="card">-->
+<!--              <div class="card-header">-->
+<!--                <h3 class="card-title">Product Details</h3>-->
+
+
+<!--              </div>-->
+<!--              &lt;!&ndash; /.card-header &ndash;&gt;-->
+<!--              <div class="card-body table-responsive p-0">-->
+<!--                <table class="table table-hover text-nowrap">-->
+<!--                  <thead>-->
+<!--                    <tr>-->
+<!--                      <th>Source</th>-->
+<!--                      <th>Confidence</th>-->
+<!--                      <th>Image</th>-->
+<!--                      <th>Description</th>-->
+<!--                    </tr>-->
+<!--                  </thead>-->
+<!--                  <tbody>-->
+<!--                    <tr>-->
+
+
+<!--                      <td>-->
+
+
+<!--                      </td>-->
+<!--                      </tr>-->
+
+<!--                  </tbody>-->
+<!--                </table>-->
+<!--              </div>-->
+<!--              &lt;!&ndash; /.card-body &ndash;&gt;-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /.card &ndash;&gt;-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--    &lt;!&ndash; /.row &ndash;&gt;-->
+  </div>
+  </section>
+<!-- /.content -->
+
+{% endblock %}

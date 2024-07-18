@@ -1,0 +1,118 @@
+{% extends "administrator/base.html" %}
+{% load widget_tweaks %}
+
+{% block body %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>{% if form.instance.id %}Update{% else %}Product{% endif %} Add</h1>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- Horizontal Form -->
+        <div class="card card-info">
+          <div class="card-header">
+            <h3 class="card-title"></h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+            <div class="card-body">
+              {% csrf_token %}
+              {% include "elements/form.html" with form=form %}
+              {{ formset.management_form }}
+              <div id="formset_container">
+                {% for form in formset %}
+                  <div class="form-row" id="form-row-{{ forloop.counter0 }}">
+                    <div class="col">
+                      {{ form.image.label_tag }}
+                      {{ form.image }}
+                    </div>
+                    <div class="col">
+                      {{ form.DELETE.label_tag }}
+                      {{ form.DELETE }}
+                    </div>
+                    <div class="col">
+                      <button type="button" class="btn btn-danger delete-form" data-form-id="form-row-{{ forloop.counter0 }}">Delete</button>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              <button type="button" id="add_more" class="btn btn-secondary">Add More Images</button>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-secondary">Reset</button>
+              <a class="text-white btn btn-danger" href="{% url 'admin-product-list' %}">Cancel</a>
+            </div>
+            <!-- /.card-footer -->
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    let formCount = {{ formset.total_form_count }};
+    const formsetContainer = document.getElementById('formset_container');
+    const addMoreButton = document.getElementById('add_more');
+
+    addMoreButton.addEventListener('click', function() {
+      const newForm = document.createElement('div');
+      newForm.classList.add('form-row');
+      newForm.setAttribute('id', `form-row-${formCount}`);
+      newForm.innerHTML = `
+        <div class="col">
+          <label for="id_form-${formCount}-image">Image:</label>
+          <input type="file" name="form-${formCount}-image" id="id_form-${formCount}-image">
+        </div>
+        <div class="col">
+          <label for="id_form-${formCount}-DELETE">Delete:</label>
+          <input type="checkbox" name="form-${formCount}-DELETE" id="id_form-${formCount}-DELETE">
+        </div>
+        <div class="col">
+          <button type="button" class="btn btn-danger delete-form" data-form-id="form-row-${formCount}">Delete</button>
+        </div>
+      `;
+      formsetContainer.appendChild(newForm);
+      formCount++;
+      document.getElementById('id_form-TOTAL_FORMS').value = formCount;
+
+      attachDeleteEvent(newForm.querySelector('.delete-form'));
+    });
+
+    document.querySelectorAll('.delete-form').forEach(button => {
+      attachDeleteEvent(button);
+    });
+
+    function attachDeleteEvent(button) {
+      button.addEventListener('click', function() {
+        const formRowId = this.getAttribute('data-form-id');
+        const formRow = document.getElementById(formRowId);
+        const deleteCheckbox = formRow.querySelector('input[type="checkbox"]');
+        if (deleteCheckbox) {
+          deleteCheckbox.checked = true;
+        }
+        formRow.style.display = 'none';
+      });
+    }
+  });
+</script>
+{% endblock %}
